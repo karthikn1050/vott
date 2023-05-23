@@ -1,38 +1,63 @@
 .App {
-  text-align: center;
+  position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid red;
+  border-radius: 50%;
+}
+.handle {
+  position: absolute;
+  background-color: #fff;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #000;
+  border-radius: 50%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.handle.top {
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.handle.right {
+  top: 50%;
+  right: -4px;
+  transform: translateY(-50%);
 }
 
-.App-link {
-  color: #61dafb;
+.handle.bottom {
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.handle.left {
+  top: 50%;
+  left: -4px;
+  transform: translateY(-50%);
+}
+
+.handle.top-right {
+  top: -4px;
+  right: -4px;
+}
+
+.handle.bottom-right {
+  bottom: -4px;
+  right: -4px;
+}
+
+.handle.bottom-left {
+  bottom: -4px;
+  left: -4px;
+}
+
+.handle.top-left {
+  top: -4px;
+  left: -4px;
 }
