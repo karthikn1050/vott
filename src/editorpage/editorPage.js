@@ -6,7 +6,6 @@ import { bindActionCreators } from "redux"
 import { SelectionMode } from "vott-ct/lib/js/CanvasTools/Interface/ISelectorSettings"
 import HtmlFileReader from "../commons/htmlFileReader"
 import { strings } from "../commons/strings"
-
 import { ToolbarItemFactory } from "../providers/toolbar/toolbarItemFactory"
 import * as applicationActions from "../redux/actions/applicationActions"
 import * as projectActions from "../redux/actions/projectActions"
@@ -53,14 +52,95 @@ export default class EditorPage extends React.Component {
     selectionMode: SelectionMode.RECT,
     assets: [],
     childAssets: [],
+    project:{
+      "name": "teset",
+      "sourceConnection": {
+        "name": "test",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+          "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+          "relativePath": true
+        },
+        "id": "xH4cU4ute"
+      },
+      "targetConnection": {
+        "name": "test",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+          "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+          "relativePath": true
+        },
+        "id": "xH4cU4ute"
+      },
+      "videoSettings": {
+        "frameExtractionRate": 15
+      },
+      "tags": [
+        {
+          "name": "cone",
+          "color": "#5db300"
+        },
+        {
+          "name": "tube",
+          "color": "#e81123"
+        },
+        {
+          "name": "unknown",
+          "color": "#6917aa"
+        }
+      ],
+      "useSecurityToken": true,
+      "securityToken": "teset Token",
+      "id": "Qtx6-QZeO",
+      "activeLearningSettings": {
+        "autoDetect": false,
+        "predictTag": true,
+        "modelPathType": "coco"
+      },
+      "exportFormat": {
+        "providerType": "vottJson",
+        "providerOptions": {
+          "assetState": "visited",
+          "includeImages": true
+        }
+      },
+      "version": "2.2.0",
+      "lastVisitedAssetId": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+      "assets": {
+        "d653dc7ce9fd74b6c76b1ec6a10fe49a": {
+          "format": "png",
+          "id": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+          "name": "788_orig.png",
+          "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png",
+          "size": {
+            "width": 4096,
+            "height": 3000
+          },
+          "state": 2,
+          "type": 1,
+          "predicted": true
+        },
+        "a759e4fe7dec3fb33ab311bd51d1ed6a": {
+          "format": "png",
+          "id": "a759e4fe7dec3fb33ab311bd51d1ed6a",
+          "name": "789_orig.png",
+          "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png",
+          "size": {
+            "width": 4096,
+            "height": 3000
+          },
+          "state": 1,
+          "type": 1
+        }
+      }
+    },
     editorMode: "RECT",
     additionalSettings: {
-      videoSettings: this.props.project
-        ? this.props.project.videoSettings
-        : null,
-      activeLearningSettings: this.props.project
-        ? this.props.project.activeLearningSettings
-        : null
+      videoSettings: {"frameExtractionRate":15} ,//this.props.project.videoSettings)
+       // : null,
+      activeLearningSettings: {"autoDetect":false,"predictTag":true,"modelPathType":"coco"}
+//        this.props.project.activeLearningSettings
+       
     },
     thumbnailSize: {
       width: 175,
@@ -79,7 +159,7 @@ export default class EditorPage extends React.Component {
   
   async componentDidMount() {
     const projectId = "Qtx6-QZeO"
-    if (this.props.project) {
+    if (this.state.project) {
       await this.loadProjectAssets()
     } else if (projectId) {
       const project = [{"name":"teset","sourceConnection":{"name":"test","providerType":"localFileSystemProxy","providerOptions":{"encrypted":"eyJjaXBoZXJ0ZXh0IjoiMzFiMDQ4OGM1YzgwZjUxNmVmM2Y4OWVhZDUyMzBkM2Q3Mzg0ZGRkNTRiMGIxNmMwY2M5ZmEyYzY0MTVlMjdkZmM5MWEzNmVkM2NkN2VhOWM2ZWM2ZmRjMzZiNDRkY2UzMzY2MzU5ZWI0N2ZiZGZmYTIyYTlkNDJiMjUwMGU2ZDM2MGY1OTBkYTg4MGY3Y2M5ZTE5NzcwNDExMzMzODc2YTc4MDViMmQ5Y2JhOTljMGMxYjg0ZDIzMWM4YzYyZjM5IiwiaXYiOiI2MzMwZmY0MzZkMWRiNDEwYmQ2MDQ1MWJiNzYyNTNmOWM3MTgwZmNkY2VkOWYwYjgifQ=="},"id":"xH4cU4ute"},"targetConnection":{"name":"test","providerType":"localFileSystemProxy","providerOptions":{"encrypted":"eyJjaXBoZXJ0ZXh0IjoiYjdjYjJhMTRjMGZhODUzYThiYWQ2Y2FmMTVhMWJjMWFmMGJjOWYxNWE2OGY2OTk5MzY1ZWQwODRlOGJhZGRjMjcxZTZhNzRhOWEwNmZlMjU5MTQwMWFhNDU1YzM4MDZkNTkwMjA5MDk4NGFjZjA2ZGNiZDhkZjZhNGYzMmJiODY3MWY1MzAwOTYyYzA2NDY1NDQzMGNiOWMxNzUzODIzNDUxZDIxNTczNjE4NzUzZDBlMjQyN2JhMmI1ZjA2Nzc5IiwiaXYiOiJhYTYwODA1MmM0MTk3NDhkNDk4N2Q3NTc5OTAzYjQ5NjlhYmI0NTZjNmEyMzgyOWUifQ=="},"id":"xH4cU4ute"},"videoSettings":{"frameExtractionRate":15},"tags":[{"name":"cone","color":"#5db300"},{"name":"tube","color":"#e81123"},{"name":"unknown","color":"#6917aa"}],"useSecurityToken":true,"securityToken":"teset Token","id":"Qtx6-QZeO","activeLearningSettings":{"autoDetect":false,"predictTag":true,"modelPathType":"coco"},"exportFormat":{"providerType":"vottJson","providerOptions":{"encrypted":"eyJjaXBoZXJ0ZXh0IjoiZDliYTc0ZmQ0ZTRiN2I4ZjJhNzdkOTQ3ZmQ5MjY4Y2U3YzU1NmFkY2YzZTA4ZDU3YzRiYTgxZGUwZDQ4YzAzZTQwMzAxMDY2OTJkNzkyNzlhNmE0MzhhZGZmMjVkYmY1IiwiaXYiOiJhYjlkZWFjMTM0YjE2NzE5ZDIyMTAzMzVhNTU4ZDlkZDVhMjJkZTZlYjY0NmVkYjIifQ=="}},"version":"2.2.0","lastVisitedAssetId":"d653dc7ce9fd74b6c76b1ec6a10fe49a","assets":{"d653dc7ce9fd74b6c76b1ec6a10fe49a":{"format":"png","id":"d653dc7ce9fd74b6c76b1ec6a10fe49a","name":"788_orig.png","path":"file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png","size":{"width":4096,"height":3000},"state":2,"type":1,"predicted":true},"a759e4fe7dec3fb33ab311bd51d1ed6a":{"format":"png","id":"a759e4fe7dec3fb33ab311bd51d1ed6a","name":"789_orig.png","path":"file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png","size":{"width":4096,"height":3000},"state":1,"type":1}}}].find(
@@ -89,42 +169,40 @@ export default class EditorPage extends React.Component {
     }
 
     this.activeLearningService = new ActiveLearningService(
-      this.props.project.activeLearningSettings
+      {"autoDetect":false,"predictTag":true,"modelPathType":"coco"}
+
     )
   }
 
   async componentDidUpdate(prevProps) {
-    if (this.props.project && this.state.assets.length === 0) {
+    if ( this.state.assets.length === 0) {
       await this.loadProjectAssets()
     }
 
     // Navigating directly to the page via URL (ie, http://vott/projects/a1b2c3dEf/edit) sets the default state
     // before props has been set, this updates the project and additional settings to be valid once props are
     // retrieved.
-    if (this.props.project && !prevProps.project) {
+    if ( !prevProps.project) {
       this.setState({
         additionalSettings: {
-          videoSettings: this.props.project
-            ? this.props.project.videoSettings
-            : null,
-          activeLearningSettings: this.props.project
-            ? this.props.project.activeLearningSettings
-            : null
+          videoSettings: {"frameExtractionRate":15}
+          ,
+          activeLearningSettings: {"autoDetect":false,"predictTag":true,"modelPathType":"coco"}
+
         }
       })
     }
 
     if (
-      this.props.project &&
-      prevProps.project &&
-      this.props.project.tags !== prevProps.project.tags
+      
+      prevProps.project
     ) {
       this.updateRootAssets()
     }
   }
 
   render() {
-    const { project } = this.props
+    const { project } = this.state
     const { assets, selectedAsset } = this.state
     const rootAssets = assets.filter(asset => !asset.parent)
 
@@ -164,8 +242,7 @@ export default class EditorPage extends React.Component {
           minSize={100}
           maxSize={400}
           paneStyle={{ display: "flex" }}
-          onChange={this.onSideBarResize}
-          onDragFinished={this.onSideBarResizeComplete}
+        
         >
           <div className="editor-page-sidebar bg-lighter-1">
             <EditorSideBar
@@ -180,7 +257,7 @@ export default class EditorPage extends React.Component {
             <div className="editor-page-content-main">
               <div className="editor-page-content-main-header">
                 <EditorToolbar
-                  project={this.props.project}
+                  project={this.state.project}
                   items={this.toolbarItems}
                   actions={this.props.actions}
                   onToolbarItemSelected={this.onToolbarItemSelected}
@@ -196,7 +273,7 @@ export default class EditorPage extends React.Component {
                     onSelectedRegionsChanged={this.onSelectedRegionsChanged}
                     editorMode={this.state.editorMode}
                     selectionMode={this.state.selectionMode}
-                    project={this.props.project}
+                    project={this.state.project}
                     lockedTags={this.state.lockedTags}
                   >
                     <AssetPreview
@@ -214,7 +291,7 @@ export default class EditorPage extends React.Component {
             </div>
             <div className="editor-page-right-sidebar">
               <TagInput
-                tags={this.props.project.tags}
+                tags={this.state.project.tags}
                 lockedTags={this.state.lockedTags}
                 selectedRegions={this.state.selectedRegions}
                 onChange={this.onTagsChanged}
@@ -262,30 +339,11 @@ export default class EditorPage extends React.Component {
   /**
    * Called when the asset side bar is resized
    * @param newWidth The new sidebar width
-   */
-  onSideBarResize = newWidth => {
-    this.setState(
-      {
-        thumbnailSize: {
-          width: newWidth,
-          height: newWidth / (4 / 3)
-        }
-      },
-      () => this.canvas.current.forceResize()
-    )
-  }
-
+ 
   /**
    * Called when the asset sidebar has been completed
    */
-  onSideBarResizeComplete = () => {
-    const appSettings = {
-      ...this.props.appSettings,
-      thumbnailSize: this.state.thumbnailSize
-    }
-
-    this.props.applicationActions.saveAppSettings(appSettings)
-  }
+ 
 
   /**
    * Called when a tag from footer is clicked
@@ -315,7 +373,7 @@ export default class EditorPage extends React.Component {
    */
   onTagRenamed = async (tagName, newTagName) => {
     const assetUpdates = await this.props.actions.updateProjectTag(
-      this.props.project,
+      this.state.project,
       tagName,
       newTagName
     )
@@ -343,7 +401,7 @@ export default class EditorPage extends React.Component {
    */
   onTagDeleted = async tagName => {
     const assetUpdates = await this.props.actions.deleteProjectTag(
-      this.props.project,
+      this.state.project,
       tagName
     )
     const selectedAsset = assetUpdates.find(
@@ -376,7 +434,7 @@ export default class EditorPage extends React.Component {
       }
     }
     let index
-    const tags = this.props.project.tags
+    const tags = this.state.project.tags
     if (key === 0 && tags.length >= 10) {
       index = 9
     } else if (key < 10) {
@@ -464,14 +522,14 @@ export default class EditorPage extends React.Component {
       rootAsset.state = assetMetadata.asset.state
     } else {
       const rootAssetMetadata = await this.props.actions.loadAssetMetadata(
-        this.props.project,
+        this.state.project,
         rootAsset
       )
 
       if (rootAssetMetadata.asset.state !== 2) {
         rootAssetMetadata.asset.state = assetMetadata.asset.state
         await this.props.actions.saveAssetMetadata(
-          this.props.project,
+          this.state.project,
           rootAssetMetadata
         )
       }
@@ -485,14 +543,257 @@ export default class EditorPage extends React.Component {
       this.state.selectedAsset !== assetMetadata
     ) {
       await this.props.actions.saveAssetMetadata(
-        this.props.project,
+        {
+          "name": "teset",
+          "sourceConnection": {
+            "name": "test",
+            "providerType": "localFileSystemProxy",
+            "providerOptions": {
+              "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+              "relativePath": true
+            },
+            "id": "xH4cU4ute"
+          },
+          "targetConnection": {
+            "name": "test",
+            "providerType": "localFileSystemProxy",
+            "providerOptions": {
+              "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+              "relativePath": true
+            },
+            "id": "xH4cU4ute"
+          },
+          "videoSettings": {
+            "frameExtractionRate": 15
+          },
+          "tags": [
+            {
+              "name": "cone",
+              "color": "#5db300"
+            },
+            {
+              "name": "tube",
+              "color": "#e81123"
+            },
+            {
+              "name": "unknown",
+              "color": "#6917aa"
+            }
+          ],
+          "useSecurityToken": true,
+          "securityToken": "teset Token",
+          "id": "Qtx6-QZeO",
+          "activeLearningSettings": {
+            "autoDetect": false,
+            "predictTag": true,
+            "modelPathType": "coco"
+          },
+          "exportFormat": {
+            "providerType": "vottJson",
+            "providerOptions": {
+              "assetState": "visited",
+              "includeImages": true
+            }
+          },
+          "version": "2.2.0",
+          "lastVisitedAssetId": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+          "assets": {
+            "d653dc7ce9fd74b6c76b1ec6a10fe49a": {
+              "format": "png",
+              "id": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+              "name": "788_orig.png",
+              "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png",
+              "size": {
+                "width": 4096,
+                "height": 3000
+              },
+              "state": 2,
+              "type": 1,
+              "predicted": true
+            },
+            "a759e4fe7dec3fb33ab311bd51d1ed6a": {
+              "format": "png",
+              "id": "a759e4fe7dec3fb33ab311bd51d1ed6a",
+              "name": "789_orig.png",
+              "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png",
+              "size": {
+                "width": 4096,
+                "height": 3000
+              },
+              "state": 1,
+              "type": 1
+            }
+          }
+        },
         assetMetadata
       )
     }
 
-    await this.props.actions.saveProject(this.props.project)
+    await this.props.actions.saveProject({
+      "name": "teset",
+      "sourceConnection": {
+        "name": "test",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+          "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+          "relativePath": true
+        },
+        "id": "xH4cU4ute"
+      },
+      "targetConnection": {
+        "name": "test",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+          "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+          "relativePath": true
+        },
+        "id": "xH4cU4ute"
+      },
+      "videoSettings": {
+        "frameExtractionRate": 15
+      },
+      "tags": [
+        {
+          "name": "cone",
+          "color": "#5db300"
+        },
+        {
+          "name": "tube",
+          "color": "#e81123"
+        },
+        {
+          "name": "unknown",
+          "color": "#6917aa"
+        }
+      ],
+      "useSecurityToken": true,
+      "securityToken": "teset Token",
+      "id": "Qtx6-QZeO",
+      "activeLearningSettings": {
+        "autoDetect": false,
+        "predictTag": true,
+        "modelPathType": "coco"
+      },
+      "exportFormat": {
+        "providerType": "vottJson",
+        "providerOptions": {
+          "assetState": "visited",
+          "includeImages": true
+        }
+      },
+      "version": "2.2.0",
+      "lastVisitedAssetId": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+      "assets": {
+        "d653dc7ce9fd74b6c76b1ec6a10fe49a": {
+          "format": "png",
+          "id": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+          "name": "788_orig.png",
+          "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png",
+          "size": {
+            "width": 4096,
+            "height": 3000
+          },
+          "state": 2,
+          "type": 1,
+          "predicted": true
+        },
+        "a759e4fe7dec3fb33ab311bd51d1ed6a": {
+          "format": "png",
+          "id": "a759e4fe7dec3fb33ab311bd51d1ed6a",
+          "name": "789_orig.png",
+          "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png",
+          "size": {
+            "width": 4096,
+            "height": 3000
+          },
+          "state": 1,
+          "type": 1
+        }
+      }
+    })
 
-    const assetService = new AssetService(this.props.project)
+    const assetService = new AssetService({
+      "name": "teset",
+      "sourceConnection": {
+        "name": "test",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+          "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+          "relativePath": true
+        },
+        "id": "xH4cU4ute"
+      },
+      "targetConnection": {
+        "name": "test",
+        "providerType": "localFileSystemProxy",
+        "providerOptions": {
+          "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+          "relativePath": true
+        },
+        "id": "xH4cU4ute"
+      },
+      "videoSettings": {
+        "frameExtractionRate": 15
+      },
+      "tags": [
+        {
+          "name": "cone",
+          "color": "#5db300"
+        },
+        {
+          "name": "tube",
+          "color": "#e81123"
+        },
+        {
+          "name": "unknown",
+          "color": "#6917aa"
+        }
+      ],
+      "useSecurityToken": true,
+      "securityToken": "teset Token",
+      "id": "Qtx6-QZeO",
+      "activeLearningSettings": {
+        "autoDetect": false,
+        "predictTag": true,
+        "modelPathType": "coco"
+      },
+      "exportFormat": {
+        "providerType": "vottJson",
+        "providerOptions": {
+          "assetState": "visited",
+          "includeImages": true
+        }
+      },
+      "version": "2.2.0",
+      "lastVisitedAssetId": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+      "assets": {
+        "d653dc7ce9fd74b6c76b1ec6a10fe49a": {
+          "format": "png",
+          "id": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+          "name": "788_orig.png",
+          "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png",
+          "size": {
+            "width": 4096,
+            "height": 3000
+          },
+          "state": 2,
+          "type": 1,
+          "predicted": true
+        },
+        "a759e4fe7dec3fb33ab311bd51d1ed6a": {
+          "format": "png",
+          "id": "a759e4fe7dec3fb33ab311bd51d1ed6a",
+          "name": "789_orig.png",
+          "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png",
+          "size": {
+            "width": 4096,
+            "height": 3000
+          },
+          "state": 1,
+          "type": 1
+        }
+      }
+    })
     const childAssets = assetService.getChildAssets(rootAsset)
 
     // Find and update the root asset in the internal state
@@ -516,7 +817,7 @@ export default class EditorPage extends React.Component {
     // When active learning auto-detect is enabled
     // run predictions when asset changes
     if (
-      this.props.project.activeLearningSettings.autoDetect &&
+      
       !this.state.selectedAsset.asset.predicted
     ) {
       await this.predictRegions(canvas)
@@ -529,7 +830,7 @@ export default class EditorPage extends React.Component {
 
   onTagsChanged = async tags => {
     const project = {
-      ...this.props.project,
+      ...this.state.project,
       tags
     }
 
@@ -674,7 +975,88 @@ export default class EditorPage extends React.Component {
     }
 
     const assetMetadata = await this.props.actions.loadAssetMetadata(
-      this.props.project,
+      {
+        "name": "teset",
+        "sourceConnection": {
+          "name": "test",
+          "providerType": "localFileSystemProxy",
+          "providerOptions": {
+            "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+            "relativePath": true
+          },
+          "id": "xH4cU4ute"
+        },
+        "targetConnection": {
+          "name": "test",
+          "providerType": "localFileSystemProxy",
+          "providerOptions": {
+            "folderPath": "/home/dhvani/Downloads/testimages/Images/Type1",
+            "relativePath": true
+          },
+          "id": "xH4cU4ute"
+        },
+        "videoSettings": {
+          "frameExtractionRate": 15
+        },
+        "tags": [
+          {
+            "name": "cone",
+            "color": "#5db300"
+          },
+          {
+            "name": "tube",
+            "color": "#e81123"
+          },
+          {
+            "name": "unknown",
+            "color": "#6917aa"
+          }
+        ],
+        "useSecurityToken": true,
+        "securityToken": "teset Token",
+        "id": "Qtx6-QZeO",
+        "activeLearningSettings": {
+          "autoDetect": false,
+          "predictTag": true,
+          "modelPathType": "coco"
+        },
+        "exportFormat": {
+          "providerType": "vottJson",
+          "providerOptions": {
+            "assetState": "visited",
+            "includeImages": true
+          }
+        },
+        "version": "2.2.0",
+        "lastVisitedAssetId": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+        "assets": {
+          "d653dc7ce9fd74b6c76b1ec6a10fe49a": {
+            "format": "png",
+            "id": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+            "name": "788_orig.png",
+            "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png",
+            "size": {
+              "width": 4096,
+              "height": 3000
+            },
+            "state": 2,
+            "type": 1,
+            "predicted": true
+          },
+          "a759e4fe7dec3fb33ab311bd51d1ed6a": {
+            "format": "png",
+            "id": "a759e4fe7dec3fb33ab311bd51d1ed6a",
+            "name": "789_orig.png",
+            "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png",
+            "size": {
+              "width": 4096,
+              "height": 3000
+            },
+            "state": 1,
+            "type": 1
+          }
+        }
+      },
       asset
     )
 
@@ -708,34 +1090,60 @@ export default class EditorPage extends React.Component {
     this.loadingProjectAssets = true
 
     // Get all root project assets
-    const rootProjectAssets = _.values(this.props.project.assets).filter(
+    const rootProjectAssets = _.values(/* this.props.project.assets */  {
+      "d653dc7ce9fd74b6c76b1ec6a10fe49a": {
+        "format": "png",
+        "id": "d653dc7ce9fd74b6c76b1ec6a10fe49a",
+        "name": "788_orig.png",
+        "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png",
+        "size": {
+          "width": 4096,
+          "height": 3000
+        },
+        "state": 2,
+        "type": 1,
+        "predicted": true
+      },
+      "a759e4fe7dec3fb33ab311bd51d1ed6a": {
+        "format": "png",
+        "id": "a759e4fe7dec3fb33ab311bd51d1ed6a",
+        "name": "789_orig.png",
+        "path": "file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png",
+        "size": {
+          "width": 4096,
+          "height": 3000
+        },
+        "state": 1,
+        "type": 1
+      }
+    }).filter(
       asset => !asset.parent
     )
 
-    // Get all root assets from source asset provider
-    const sourceAssets = await this.props.actions.loadAssets(this.props.project)
+    // // Get all root assets from source asset provider
+    // const sourceAssets = await this.props.actions.loadAssets(this.state.project)
 
-    // Merge and uniquify
-    const rootAssets = _(rootProjectAssets)
-      .concat(sourceAssets)
-      .uniqBy(asset => asset.id)
-      .value()
+    // // Merge and uniquify
+    // const rootAssets = _(rootProjectAssets)
+    //   .concat(sourceAssets)
+    //   .uniqBy(asset => asset.id)
+    //   .value()
 
-    const lastVisited = rootAssets.find(
-      asset => asset.id === this.props.project.lastVisitedAssetId
-    )
+    // const lastVisited = rootAssets.find(
+    //   asset => asset.id === "d653dc7ce9fd74b6c76b1ec6a10fe49a"
+    // )
 
-    this.setState(
-      {
-        assets: rootAssets
-      },
-      async () => {
-        if (rootAssets.length > 0) {
-          await this.selectAsset(lastVisited ? lastVisited : rootAssets[0])
-        }
-        this.loadingProjectAssets = false
-      }
-    )
+    // this.setState(
+    //   {
+    //     assets: rootAssets
+    //   },
+    //   async () => {
+    //     if (rootAssets.length > 0) {
+    //       await this.selectAsset(lastVisited ? lastVisited : rootAssets[0])
+    //     }
+    //     this.loadingProjectAssets = false
+    //   }
+    // )
   }
 
   /**
@@ -744,7 +1152,7 @@ export default class EditorPage extends React.Component {
   updateRootAssets = () => {
     const updatedAssets = [...this.state.assets]
     updatedAssets.forEach(asset => {
-      const projectAsset = this.props.project.assets[asset.id]
+      const projectAsset =  "d653dc7ce9fd74b6c76b1ec6a10fe49a"
       if (projectAsset) {
         asset.state = projectAsset.state
       }

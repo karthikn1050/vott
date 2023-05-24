@@ -33,18 +33,18 @@ export default class Canvas extends React.Component {
   componentDidMount = () => {
     const sz = document.getElementById("editor-zone")
     this.editor = new CanvasTools.Editor(sz)
-    this.editor.autoResize = false
+  //  this.editor.autoResize = false
     this.editor.onSelectionEnd = this.onSelectionEnd
     this.editor.onRegionMoveEnd = this.onRegionMoveEnd
     this.editor.onRegionDelete = this.onRegionDelete
     this.editor.onRegionSelected = this.onRegionSelected
     this.editor.AS.setSelectionMode({ mode: this.props.selectionMode })
 
-    window.addEventListener("resize", this.onWindowResize)
+  //  window.addEventListener("resize", this.onWindowResize)
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.onWindowResize)
+  //  window.removeEventListener("resize", this.onWindowResize)
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
@@ -202,9 +202,9 @@ export default class Canvas extends React.Component {
     }
   }
 
-  forceResize = () => {
-    this.onWindowResize()
-  }
+//  forceResize = () => {
+ //   this.onWindowResize()
+//  }
 
   removeAllRegions = () => {
     const ids = this.state.currentAsset.regions.map(r => r.id)
@@ -492,20 +492,20 @@ export default class Canvas extends React.Component {
       canvas.style.left = `${boundingBox.left}px`
       canvas.style.width = `${boundingBox.width}px`
       canvas.style.height = `${boundingBox.height}px`
-      this.editor.resize(boundingBox.width, boundingBox.height)
+      //this.editor.resize(boundingBox.width, boundingBox.height)
     }
   }
 
   /**
    * Resizes and re-renders the canvas when the application window size changes
    */
-  onWindowResize = async () => {
-    if (!this.state.contentSource) {
-      return
-    }
+ // onWindowResize = async () => {
+  //  if (!this.state.contentSource) {
+  //    return
+  //  }
 
-    this.positionCanvas(this.state.contentSource)
-  }
+  //  this.positionCanvas(this.state.contentSource)
+//  }
 
   /**
    * Updates regions in both Canvas Tools and the asset data store

@@ -10,14 +10,14 @@ const Circle = ({ position, radius, onDrag, onResize }) => {
   const handleResize = (event, direction, ref, delta) => {
     const width = radius * 2 + delta.width;
     const height = radius * 2 + delta.height;
-    onResize(width, height);
+    //onResize(width, height);
   };
 
   return (
     <Draggable position={position} onDrag={handleDrag}>
       <Resizable
         size={{ width: radius * 2, height: radius * 2 }}
-        onResize={handleResize}
+        //onResize={handleResize}
         handleComponent={{
           top: <div className="handle top" />,
           right: <div className="handle right" />,
