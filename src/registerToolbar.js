@@ -1,8 +1,8 @@
 import { ToolbarItemFactory } from "./providers/toolbar/toolbarItemFactory"
-import { ExportProject } from "./react/components/toolbar/exportProject"
-import { SaveProject } from "./react/components/toolbar/saveProject"
-import { ToolbarItemType } from "./react/components/toolbar/toolbarItem"
-import { strings } from "./common/strings"
+import { ExportProject } from "./toolbar/exportProject"
+import { SaveProject } from "./toolbar/saveProject"
+import { ToolbarItemType } from "./toolbar/toolbarItem"
+import { strings } from "./commons/strings"
 
 export let ToolbarItemName
 

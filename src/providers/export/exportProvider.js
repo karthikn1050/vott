@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportProvider = exports.ExportAssetState = void 0;
-var guard_1 = require("../../common/guard");
+var guard_1 = require("../../commons/guard");
 var applicationState_1 = require("../../models/applicationState");
 var storageProviderFactory_1 = require("../storage/storageProviderFactory");
 var assetProviderFactory_1 = require("../storage/assetProviderFactory");

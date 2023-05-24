@@ -3,7 +3,7 @@ import * as shortid from "shortid"
 import * as tf from "@tensorflow/tfjs"
 import { ElectronProxyHandler } from "./electronProxyHandler"
 import { RegionType } from "../../models/applicationState"
-import { strings } from "../../common/strings"
+import { strings } from "../../commons/strings"
 
 /**
  * Object Dectection loads active learning models and predicts regions

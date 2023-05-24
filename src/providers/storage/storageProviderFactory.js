@@ -12,8 +12,8 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StorageProviderFactory = void 0;
-var guard_1 = require("../../common/guard");
-var hostProcess_1 = require("../../common/hostProcess");
+var guard_1 = require("../../commons/guard");
+var hostProcess_1 = require("../../commons/hostProcess");
 /**
  * @name - Storage Provider Factory
  * @description - Creates instance of Storage Providers based on request provider type

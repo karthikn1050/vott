@@ -1,0 +1,186 @@
+import _ from "lodash"
+import shortid from "shortid"
+import { StorageProviderFactory } from "../providers/storage/storageProviderFactory"
+import { AppError, ErrorCode, ModelPathType } from "../models/applicationState"
+import Guard from "../commons/guard"
+import { constants } from "../commons/constants"
+import { ExportProviderFactory } from "../providers/export/exportProviderFactory"
+import { decryptProject, encryptProject } from "../commons/utils"
+import packageJson from "../../package.json"
+import { ExportAssetState } from "../providers/export/exportProvider"
+
+const defaultActiveLearningSettings = {
+  autoDetect: false,
+  predictTag: true,
+  modelPathType: ModelPathType.Coco
+}
+
+const defaultExportOptions = {
+  providerType: "vottJson",
+  providerOptions: {
+    assetState: ExportAssetState.Visited,
+    includeImages: true
+  }
+}
+
+/**
+ * @name - Project Service
+ * @description - Functions for dealing with projects
+ */
+export default class ProjectService {
+  /**
+   * Loads a project
+   * @param project The project JSON to load
+   * @param securityToken The security token used to decrypt sensitive project settings
+   */
+  load(project, securityToken) {
+    Guard.null(project)
+
+    try {
+      const loadedProject = project.useSecurityToken
+        ? decryptProject(project, securityToken)
+        : { ...project }
+
+      // Ensure tags is always initialized to an array
+      if (!loadedProject.tags) {
+        loadedProject.tags = []
+      }
+
+      // Initialize active learning settings if they don't exist
+      if (!loadedProject.activeLearningSettings) {
+        loadedProject.activeLearningSettings = defaultActiveLearningSettings
+      }
+
+      // Initialize export settings if they don't exist
+      if (!loadedProject.exportFormat) {
+        loadedProject.exportFormat = defaultExportOptions
+      }
+
+      this.ensureBackwardsCompatibility(loadedProject)
+
+      return Promise.resolve({ ...loadedProject })
+    } catch (e) {
+      const error = new AppError(
+        ErrorCode.ProjectInvalidSecurityToken,
+        "Error decrypting project settings"
+      )
+      return Promise.reject(error)
+    }
+  }
+
+  /**
+   * Save a project
+   * @param project - Project to save
+   * @param securityToken - Security Token to encrypt
+   */
+  async save(project, securityToken) {
+    Guard.null(project)
+
+    if (!project.id) {
+      project.id = shortid.generate()
+    }
+
+    // Ensure tags is always initialized to an array
+    if (!project.tags) {
+      project.tags = []
+    }
+
+    // Initialize active learning settings if they don't exist
+    if (!project.activeLearningSettings) {
+      project.activeLearningSettings = defaultActiveLearningSettings
+    }
+
+    // Initialize export settings if they don't exist
+    if (!project.exportFormat) {
+      project.exportFormat = defaultExportOptions
+    }
+
+    project.version = packageJson.version
+
+    const storageProvider = StorageProviderFactory.createFromConnection(
+      project.targetConnection
+    )
+    await this.saveExportSettings(project)
+    project = project.useSecurityToken
+      ? encryptProject(project, securityToken)
+      : { ...project }
+
+    await storageProvider.writeText(
+      `${project.name}${constants.projectFileExtension}`,
+      JSON.stringify(project, null, 4)
+    )
+
+    return project
+  }
+
+  /**
+   * Delete a project
+   * @param project - Project to delete
+   */
+  async delete(project) {
+    Guard.null(project)
+
+    const storageProvider = StorageProviderFactory.createFromConnection(
+      project.targetConnection
+    )
+
+    // Delete all asset metadata files created for project
+    const deleteFiles = _.values(project.assets).map(asset =>
+      storageProvider.deleteFile(
+        `${asset.id}${constants.assetMetadataFileExtension}`
+      )
+    )
+
+    await Promise.all(deleteFiles)
+    await storageProvider.deleteFile(
+      `${project.name}${constants.projectFileExtension}`
+    )
+  }
+
+  /**
+   * Checks whether or not the project would cause a duplicate at the target connection
+   * @param project The project to validate
+   * @param projectList The list of known projects
+   */
+  isDuplicate(project, projectList) {
+    const duplicateProjects = projectList.find(
+      p =>
+        p.id !== project.id &&
+        p.name === project.name &&
+        JSON.stringify(p.targetConnection.providerOptions) ===
+          JSON.stringify(project.targetConnection.providerOptions)
+    )
+    return duplicateProjects !== undefined
+  }
+
+  async saveExportSettings(project) {
+    if (!project.exportFormat || !project.exportFormat.providerType) {
+      return Promise.resolve()
+    }
+
+    const exportProvider = ExportProviderFactory.createFromProject(project)
+
+    if (!exportProvider.save) {
+      return Promise.resolve()
+    }
+
+    project.exportFormat.providerOptions = await exportProvider.save(
+      project.exportFormat
+    )
+  }
+
+  /**
+   * Ensures backwards compatibility with project
+   * @param project The project to update
+   */
+  ensureBackwardsCompatibility(project) {
+    const projectVersion = project.version.toLowerCase()
+
+    if (projectVersion.startsWith("2.0.0")) {
+      // Required for backwards compatibility with v2.0.0 release
+      if (project.exportFormat.providerType === "tensorFlowPascalVOC") {
+        project.exportFormat.providerType = "pascalVOC"
+      }
+    }
+  }
+}

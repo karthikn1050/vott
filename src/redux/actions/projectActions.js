@@ -4,8 +4,8 @@ import { AssetService } from "../../services/assetService"
 import { ExportProviderFactory } from "../../providers/export/exportProviderFactory"
 import { AppError, ErrorCode } from "../../models/applicationState"
 import { createAction, createPayloadAction } from "./actionCreators"
-import { appInfo } from "../../common/appInfo"
-import { strings } from "../../common/strings"
+import { appInfo } from "../../commons/appInfo"
+import { strings } from "../../commons/strings"
 
 /**
  * Dispatches Load Project action and resolves with IProject

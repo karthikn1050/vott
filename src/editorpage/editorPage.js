@@ -17,7 +17,7 @@ import { KeyboardBinding } from "../common/keyboardBinding/keyboardBinding"
 import { KeyEventType } from "../common/keyboardManager/keyboardManager"
 import { TagInput } from "../common/tagInput/tagInput"
 import Canvas from "./canvas"
-import CanvasHelpers from "./canvasHelpers"
+import CanvasHelpers from "./canvasHelper"
 import "./editorPage.scss"
 import EditorSideBar from "./editorSideBar"
 import { EditorToolbar } from "./editorToolbar"
@@ -62,7 +62,7 @@ export default class EditorPage extends React.Component {
         ? this.props.project.activeLearningSettings
         : null
     },
-    thumbnailSize: this.props.appSettings.thumbnailSize || {
+    thumbnailSize: {
       width: 175,
       height: 155
     },
@@ -76,13 +76,13 @@ export default class EditorPage extends React.Component {
   canvas = React.createRef()
   renameTagConfirm = React.createRef()
   deleteTagConfirm = React.createRef()
-
+  
   async componentDidMount() {
-    const projectId = this.props.match.params["projectId"]
+    const projectId = "Qtx6-QZeO"
     if (this.props.project) {
       await this.loadProjectAssets()
     } else if (projectId) {
-      const project = this.props.recentProjects.find(
+      const project = [{"name":"teset","sourceConnection":{"name":"test","providerType":"localFileSystemProxy","providerOptions":{"encrypted":"eyJjaXBoZXJ0ZXh0IjoiMzFiMDQ4OGM1YzgwZjUxNmVmM2Y4OWVhZDUyMzBkM2Q3Mzg0ZGRkNTRiMGIxNmMwY2M5ZmEyYzY0MTVlMjdkZmM5MWEzNmVkM2NkN2VhOWM2ZWM2ZmRjMzZiNDRkY2UzMzY2MzU5ZWI0N2ZiZGZmYTIyYTlkNDJiMjUwMGU2ZDM2MGY1OTBkYTg4MGY3Y2M5ZTE5NzcwNDExMzMzODc2YTc4MDViMmQ5Y2JhOTljMGMxYjg0ZDIzMWM4YzYyZjM5IiwiaXYiOiI2MzMwZmY0MzZkMWRiNDEwYmQ2MDQ1MWJiNzYyNTNmOWM3MTgwZmNkY2VkOWYwYjgifQ=="},"id":"xH4cU4ute"},"targetConnection":{"name":"test","providerType":"localFileSystemProxy","providerOptions":{"encrypted":"eyJjaXBoZXJ0ZXh0IjoiYjdjYjJhMTRjMGZhODUzYThiYWQ2Y2FmMTVhMWJjMWFmMGJjOWYxNWE2OGY2OTk5MzY1ZWQwODRlOGJhZGRjMjcxZTZhNzRhOWEwNmZlMjU5MTQwMWFhNDU1YzM4MDZkNTkwMjA5MDk4NGFjZjA2ZGNiZDhkZjZhNGYzMmJiODY3MWY1MzAwOTYyYzA2NDY1NDQzMGNiOWMxNzUzODIzNDUxZDIxNTczNjE4NzUzZDBlMjQyN2JhMmI1ZjA2Nzc5IiwiaXYiOiJhYTYwODA1MmM0MTk3NDhkNDk4N2Q3NTc5OTAzYjQ5NjlhYmI0NTZjNmEyMzgyOWUifQ=="},"id":"xH4cU4ute"},"videoSettings":{"frameExtractionRate":15},"tags":[{"name":"cone","color":"#5db300"},{"name":"tube","color":"#e81123"},{"name":"unknown","color":"#6917aa"}],"useSecurityToken":true,"securityToken":"teset Token","id":"Qtx6-QZeO","activeLearningSettings":{"autoDetect":false,"predictTag":true,"modelPathType":"coco"},"exportFormat":{"providerType":"vottJson","providerOptions":{"encrypted":"eyJjaXBoZXJ0ZXh0IjoiZDliYTc0ZmQ0ZTRiN2I4ZjJhNzdkOTQ3ZmQ5MjY4Y2U3YzU1NmFkY2YzZTA4ZDU3YzRiYTgxZGUwZDQ4YzAzZTQwMzAxMDY2OTJkNzkyNzlhNmE0MzhhZGZmMjVkYmY1IiwiaXYiOiJhYjlkZWFjMTM0YjE2NzE5ZDIyMTAzMzVhNTU4ZDlkZDVhMjJkZTZlYjY0NmVkYjIifQ=="}},"version":"2.2.0","lastVisitedAssetId":"d653dc7ce9fd74b6c76b1ec6a10fe49a","assets":{"d653dc7ce9fd74b6c76b1ec6a10fe49a":{"format":"png","id":"d653dc7ce9fd74b6c76b1ec6a10fe49a","name":"788_orig.png","path":"file:/home/dhvani/Downloads/testimages/Images/Type1/788_orig.png","size":{"width":4096,"height":3000},"state":2,"type":1,"predicted":true},"a759e4fe7dec3fb33ab311bd51d1ed6a":{"format":"png","id":"a759e4fe7dec3fb33ab311bd51d1ed6a","name":"789_orig.png","path":"file:/home/dhvani/Downloads/testimages/Images/Type1/789_orig.png","size":{"width":4096,"height":3000},"state":1,"type":1}}}].find(
         project => project.id === projectId
       )
       await this.props.actions.loadProject(project)

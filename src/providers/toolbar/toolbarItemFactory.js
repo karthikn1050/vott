@@ -1,5 +1,5 @@
-import { ToolbarItem } from "../../react/components/toolbar/toolbarItem"
-import Guard from "../../common/guard"
+import { ToolbarItem } from "../../toolbar/toolbarItem"
+import Guard from "../../commons/guard"
 
 /**
  * @name - Toolbar Item Factory

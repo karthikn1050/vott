@@ -1,7 +1,7 @@
-import { IpcRendererProxy } from "../../common/ipcRendererProxy"
+import { IpcRendererProxy } from "../../commons/ipcRendererProxy"
 import { ActionTypes } from "./actionTypes"
 import { createPayloadAction, createAction } from "./actionCreators"
-import { generateKey } from "../../common/crypto"
+import { generateKey } from "../../commons/crypto"
 
 /**
  * Open or close dev tools

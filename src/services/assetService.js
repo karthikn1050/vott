@@ -1,16 +1,16 @@
 import MD5 from "md5.js"
 import _ from "lodash"
 import * as shortid from "shortid"
-import Guard from "../common/guard"
+import Guard from "../commons/guard"
 import { AssetType, AssetState, RegionType } from "../models/applicationState"
 import { AssetProviderFactory } from "../providers/storage/assetProviderFactory"
 import { StorageProviderFactory } from "../providers/storage/storageProviderFactory"
-import { constants } from "../common/constants"
-import HtmlFileReader from "../common/htmlFileReader"
+import { constants } from "../commons/constants"
+import HtmlFileReader from "../commons/htmlFileReader"
 import { TFRecordsReader } from "../providers/export/tensorFlowRecords/tensorFlowReader"
 import { FeatureType } from "../providers/export/tensorFlowRecords/tensorFlowBuilder"
-import { appInfo } from "../common/appInfo"
-import { encodeFileURI } from "../common/utils"
+import { appInfo } from "../commons/appInfo"
+import { encodeFileURI } from "../commons/utils"
 
 /**
  * @name - Asset Service

@@ -4,9 +4,7 @@ import {Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div>
-     <Routes>
-     <Route path="/projects/:projectId/edit" component={EditorPage} />
-       </Routes> 
+     <EditorPage />
     
     </div>
   );

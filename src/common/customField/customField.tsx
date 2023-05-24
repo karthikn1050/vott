@@ -1,6 +1,6 @@
 import React from "react";
 import { FieldProps, WidgetProps } from "react-jsonschema-form";
-import Guard from "../../../../common/guard";
+import Guard from "../../../commons/guard";
 
 /**
  * Custom field for react-jsonschema-form

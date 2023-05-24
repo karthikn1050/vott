@@ -12,8 +12,8 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssetProviderFactory = void 0;
-var guard_1 = require("../../common/guard");
-var hostProcess_1 = require("../../common/hostProcess");
+var guard_1 = require("../../commons/guard");
+var hostProcess_1 = require("../../commons/hostProcess");
 /**
  * @name - Asset Provider Factory
  * @description - Creates instance of Asset Providers based on request provider type
