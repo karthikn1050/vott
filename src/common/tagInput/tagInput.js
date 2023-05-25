@@ -218,7 +218,7 @@ export class TagInput extends React.Component {
     return (
       <div>
         {ReactDOM.createPortal(
-          <Align align={this.getAlignConfig()} target={this.getTarget}>
+         
             <div className="tag-input-color-picker">
               {this.state.showColorPicker && (
                 <ColorPicker
@@ -229,7 +229,7 @@ export class TagInput extends React.Component {
                 />
               )}
             </div>
-          </Align>,
+         ,
           this.state.portalElement
         )}
       </div>
